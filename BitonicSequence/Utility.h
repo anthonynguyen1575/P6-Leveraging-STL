@@ -1,31 +1,17 @@
-#pragma once
-#include <ostream>
-#include <vector>
-#include <random>
-#include "Car.h"
+#include "Utility.h"
 
-template<typename T>
-std::ostream& operator<<(std::ostream& out, std::vector<T> data)
-{
-    out << "[\n";
-    for (const auto& elem : data)
-        out << "\t" << elem << ",\n";
-    out << "]";
-    return out;
-}
-
-template<typename T, typename TCreator>
-std::vector<T> randomVectorOfObjects(TCreator creator) {
+std::vector<int> randomIntegers() {
     std::mt19937 generator{ std::random_device{}() };
-    std::uniform_int_distribution<> listSizeDist{ 15, 30 };
+    std::uniform_int_distribution<> dist{ 0, 100 };
 
-    auto listSize = listSizeDist(generator);
-    std::vector<T> values;
-    for (int i = 0; i < listSize; i++) {
-        values.push_back(creator());
-    }
-    return values;
+    auto creator = [&generator, &dist]() {
+        return dist(generator);
+    };
+
+    return randomVectorOfObjects<int, decltype(creator)>(creator);
 }
 
-std::vector<int> randomIntegers();
-std::vector<Car> randomCars();
+
+std::vector<Car> randomCars() {
+    return randomVectorOfObjects<Car, decltype(Car::createRandom)>(Car::createRandom);
+}
