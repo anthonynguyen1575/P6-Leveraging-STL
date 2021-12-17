@@ -13,9 +13,26 @@ int main() {
     std::cout << "Are there any primes? " << (anyPrime(integers) ? "yes" : "no") << "\n";
 }
 
+bool isPrime(int number){
+    bool prime = true;
+
+    for (int i = 2; i <= number / 2; ++i) {
+        if (number % i == 0) {
+            prime = false;
+            break;
+        }
+    }
+    return prime;
+}
+
 bool anyPrime(const std::vector<int>& values) {
-    // TODO: return true if any of the values are prime numbers
     auto result = false;
+
+    for(int number : values) {
+        if(isPrime(number)) {
+            result = true;
+        }
+    }
 
     return result;
 }
